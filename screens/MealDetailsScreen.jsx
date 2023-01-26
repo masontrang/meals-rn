@@ -20,7 +20,13 @@ function MealDetailsScreen({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <IconButton />;
+        return (
+          <IconButton
+            onPress={headerButtonPressHandler}
+            icon="star"
+            color="white"
+          />
+        );
       },
     });
   }, [navigation, headerButtonPressHandler]);
@@ -49,7 +55,7 @@ function MealDetailsScreen({ route, navigation }) {
 }
 export default MealDetailsScreen;
 const styles = StyleSheet.create({
-  rootContainer: { marginBottom: 32 },
+  rootContainer: { marginBottom: 64 },
   image: {
     width: '100%',
     height: 350,
@@ -83,6 +89,7 @@ const styles = StyleSheet.create({
   },
   listOuterContainer: {
     alignItems: 'center',
+    marginBottom: 256,
   },
   headerButton: { color: 'white' },
 });
