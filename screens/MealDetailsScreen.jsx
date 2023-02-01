@@ -11,27 +11,38 @@ import Subtitle from '../components/MealDetail/Subtitle';
 import List from '../components/MealDetail/List';
 import IconButton from '../components/IconButton';
 import { MEALS } from '../data/dummy-data';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useContext } from 'react';
+import { FavoritesContext } from '../store/context/favorites-context';
 
 function MealDetailsScreen({ route, navigation }) {
-  function headerButtonPressHandler() {
-    console.log('pressed');
+  const favoriteMealsContext = useContext(FavoritesContext);
+  const mealId = route.params.mealId;
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const mealIsFavorite = favoriteMealsContext.ids.includes(mealId);
+  // const mealIsFavorite = 0;
+
+  function changeFavoriteStatusHandler() {
+    // console.log('meals', favoriteMealsContext.ids?.includes(mealId));
+    if (mealIsFavorite) {
+      favoriteMealsContext.removeFavorite(mealId);
+    } else {
+      favoriteMealsContext.addFavorite(mealId);
+    }
   }
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (
           <IconButton
-            onPress={headerButtonPressHandler}
-            icon="star"
+            onPress={changeFavoriteStatusHandler}
+            icon={mealIsFavorite ? 'star' : 'star-outline'}
             color="white"
           />
         );
       },
     });
-  }, [navigation, headerButtonPressHandler]);
-  const mealId = route.params.mealId;
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  }, [navigation, changeFavoriteStatusHandler]);
+
   return (
     <ScrollView style={styles.rootContainer}>
       <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
